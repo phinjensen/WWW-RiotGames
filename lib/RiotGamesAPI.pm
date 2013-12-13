@@ -13,7 +13,14 @@ our @EXPORT_OK = qw(
     get_champions
     get_game_by_id
     get_league_by_id
+    get_stats_summary_by_id
+    get_stats_ranked_by_id
+    get_summoner_masteries_by_id
+    get_summoner_runes_by_id
     get_summoner_by_name
+    get_summoner_by_id
+    get_summoner_names_by_ids
+    get_teams_by_summoner
 );
 
 my $url_base = "http://prod.api.pvp.net/api/";
@@ -30,31 +37,73 @@ sub set_api_key {
 
 sub make_lol_api_call {
     my ($lookup) = @_;
-    decode_json( get($url_base . "lol/" . $region . $lookup . "?api_key=$api_key") );
+    decode_json( get($url_base . "lol/" . $region . "/v1.1" . $lookup . "?api_key=$api_key") );
 }
 
 sub make_api_call {
     my ($lookup) = @_;
-    decode_json( get($url_base . $region . $lookup . "?api_key=$api_key") );
+    decode_json( get($url_base . $region . "/v2.1" . $lookup . "?api_key=$api_key") );
 }
 
+# Champions
 sub get_champions {
-    make_lol_api_call("/v1.1/champion");
+    make_lol_api_call("/champion");
 }
 
+# Games
 sub get_game_by_id {
     my ($summonerid) = @_;
-    make_lol_api_call("/v1.1/game/by-summoner/$summonerid/recent");
+    make_lol_api_call("/game/by-summoner/$summonerid/recent");
 }
 
+# League info
 sub get_league_by_id {
     my ($summonerid) = @_;
-    make_api_call("/v2.1/league/by-summoner/$summonerid");
+    make_api_call("/league/by-summoner/$summonerid");
+}
+
+# Stats
+sub get_stats_summary_by_id {
+    my ($summonerid) = @_;
+    make_lol_api_call("/stats/by-summoner/$summonerid/summary");
+}
+
+sub get_stats_ranked_by_id {
+    my ($summonerid) = @_;
+    make_lol_api_call("/stats/by-summoner/$summonerid/ranked");
+}
+
+# Summoner info
+sub get_summoner_masteries_by_id {
+    my ($summonerid) = @_;
+    make_lol_api_call("/summoner/$summonerid/masteries");
+}
+
+sub get_summoner_runes_by_id {
+    my ($summonerid) = @_;
+    make_lol_api_call("/summoner/$summonerid/runes");
 }
 
 sub get_summoner_by_name {
     my ($username) = @_;
-    make_lol_api_call("/v1.1/summoner/by-name/$username");
+    make_lol_api_call("/summoner/by-name/$username");
+}
+
+sub get_summoner_by_id {
+    my ($summonerid) = @_;
+    make_lol_api_call("/summoner/$summonerid");
+}
+
+sub get_summoner_names_by_ids {
+    my ($summonerids) = @_;
+    make_lol_api_call("/summoner/$summonerids/name");
+}
+
+# Teams
+
+sub get_teams_by_summoner {
+    my ($summonerid) = @_;
+    make_api_call("/team/by-summoner/$summonerid");
 }
 
 1;
