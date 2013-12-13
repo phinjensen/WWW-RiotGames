@@ -1,17 +1,17 @@
-RiotGamesAPI
-============
+WWW::RiotGames
+==============
 
-Perl module for accessing the Riot Games API
+Perl wrapper for Riot Games' League of Legends API
 
-## Getting Started
+## Getting Started 
 
-1. `use RiotGamesAPI` in your script.
-2. Set the API key with `set_api_key(API_key)`
-3. Set the region with `set_region(region)`.
+To use this API, you need an API key, which you can get from [the official website][1]. You also need to isntall LWP::Simple.
 
-## Functions
+Before anything else, you need to set your API key and region:
 
-####get_summoner_by_name
+```perl
+set_api_key("<your key here>")
+set_region("<region>")
 ```
-my $summoner = get_summoner_by_name('meatwadsprite');
-```
+
+[1]: https://developer.riotgames.com/

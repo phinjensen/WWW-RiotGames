@@ -1,4 +1,4 @@
-package RiotGamesAPI;
+package WWW::RiotGames;
 
 use LWP::Simple;
 use JSON qw( decode_json );
