@@ -5,7 +5,7 @@ Perl wrapper for Riot Games' League of Legends API
 
 ## Getting Started 
 
-To use this API, you need an API key, which you can get from [the official website][1]. You also need to isntall LWP::Simple.
+To use this API, you need an API key, which you can get from [the official website][1]. You also need to install LWP::Simple.
 
 Before anything else, you need to set your API key and region:
 
