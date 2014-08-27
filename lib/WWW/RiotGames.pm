@@ -23,7 +23,6 @@ our @EXPORT_OK = qw(
     get_teams_by_summoner
 );
 
-my $url_base = "http://prod.api.pvp.net/api/";
 my $region;
 my $api_key;
 
@@ -37,7 +36,9 @@ sub set_api_key {
 
 sub make_api_call {
     my $lookup = shift;
-    decode_json( get($url_base . "lol/" . $region . $lookup . "?api_key=$api_key") );
+    my $url_base = "http://$region.api.pvp.net/api/";
+    my $request_url = $url_base . "lol/" . $region . $lookup . "?api_key=$api_key";
+    decode_json get($request_url);
 }
 
 # Champions
