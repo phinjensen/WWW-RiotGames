@@ -54,7 +54,7 @@ sub get_champion_by_id {
 # Games
 sub get_game_by_id {
     my $summonerid = shift;
-    make_api_call("/v1.2/game/by-summoner/$summonerid/recent");
+    make_api_call("/v1.3/game/by-summoner/$summonerid/recent");
 }
 
 # League info
@@ -66,38 +66,38 @@ sub get_league_by_id {
 # Stats
 sub get_stats_summary_by_id {
     my $summonerid = shift;
-    make_api_call("/v1.2/stats/by-summoner/$summonerid/summary");
+    make_api_call("/v1.3/stats/by-summoner/$summonerid/summary");
 }
 
 sub get_stats_ranked_by_id {
     my $summonerid = shift;
-    make_api_call("/v1.2/stats/by-summoner/$summonerid/ranked");
+    make_api_call("/v1.3/stats/by-summoner/$summonerid/ranked");
 }
 
 # Summoner info
 sub get_summoner_masteries_by_id {
     my $summonerid = shift;
-    make_api_call("/v1.2/summoner/$summonerid/masteries");
+    make_api_call("/v1.4/summoner/$summonerid/masteries");
 }
 
 sub get_summoner_runes_by_id {
     my $summonerid = shift;
-    make_api_call("/v1.2/summoner/$summonerid/runes");
+    make_api_call("/v1.4/summoner/$summonerid/runes");
 }
 
 sub get_summoner_by_name {
     my $username = shift;
-    make_api_call("/v1.2/summoner/by-name/$username");
+    make_api_call("/v1.4/summoner/by-name/$username");
 }
 
 sub get_summoner_by_id {
     my $summonerid = shift;
-    make_api_call("/v1.2/summoner/$summonerid");
+    make_api_call("/v1.4/summoner/$summonerid");
 }
 
 sub get_summoner_names_by_ids {
     my $summonerids = shift;
-    make_api_call("/v1.2/summoner/$summonerids/name");
+    make_api_call("/v1.4/summoner/$summonerids/name");
 }
 
 # Teams
