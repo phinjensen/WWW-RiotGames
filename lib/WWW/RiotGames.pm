@@ -28,15 +28,15 @@ my $region;
 my $api_key;
 
 sub set_region {
-    ($region) = @_;
+    $region = shift;
 }
 
 sub set_api_key {
-    ($api_key) = @_;
+    $api_key = shift;
 }
 
 sub make_api_call {
-    my ($lookup) = @_;
+    my $lookup = shift;
     decode_json( get($url_base . "lol/" . $region . $lookup . "?api_key=$api_key") );
 }
 
@@ -47,57 +47,57 @@ sub get_champions {
 
 # Games
 sub get_game_by_id {
-    my ($summonerid) = @_;
+    my $summonerid = shift;
     make_api_call("/v1.2/game/by-summoner/$summonerid/recent");
 }
 
 # League info
 sub get_league_by_id {
-    my ($summonerid) = @_;
+    my $summonerid = shift;
     make_api_call("/v2.2/league/by-summoner/$summonerid");
 }
 
 # Stats
 sub get_stats_summary_by_id {
-    my ($summonerid) = @_;
+    my $summonerid = shift;
     make_api_call("/v1.2/stats/by-summoner/$summonerid/summary");
 }
 
 sub get_stats_ranked_by_id {
-    my ($summonerid) = @_;
+    my $summonerid = shift;
     make_api_call("/v1.2/stats/by-summoner/$summonerid/ranked");
 }
 
 # Summoner info
 sub get_summoner_masteries_by_id {
-    my ($summonerid) = @_;
+    my $summonerid = shift;
     make_api_call("/v1.2/summoner/$summonerid/masteries");
 }
 
 sub get_summoner_runes_by_id {
-    my ($summonerid) = @_;
+    my $summonerid = shift;
     make_api_call("/v1.2/summoner/$summonerid/runes");
 }
 
 sub get_summoner_by_name {
-    my ($username) = @_;
+    my $username = shift;
     make_api_call("/v1.2/summoner/by-name/$username");
 }
 
 sub get_summoner_by_id {
-    my ($summonerid) = @_;
+    my $summonerid = shift;
     make_api_call("/v1.2/summoner/$summonerid");
 }
 
 sub get_summoner_names_by_ids {
-    my ($summonerids) = @_;
+    my $summonerids = shift;
     make_api_call("/v1.2/summoner/$summonerids/name");
 }
 
 # Teams
 
 sub get_teams_by_summoner {
-    my ($summonerid) = @_;
+    my $summonerid = shift;
     make_api_call("/v2.2/team/by-summoner/$summonerid");
 }
 
