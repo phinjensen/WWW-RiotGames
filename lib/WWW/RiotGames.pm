@@ -43,8 +43,13 @@ sub make_api_call {
 
 # Champions
 sub get_champions {
-    make_api_call("/v1.1/champion");
+    make_api_call("/v1.2/champion");
 }
+
+sub get_champion_by_id {
+    my $championid = shift;
+    make_api_call("/v1.2/champion/$championid");
+};
 
 # Games
 sub get_game_by_id {
