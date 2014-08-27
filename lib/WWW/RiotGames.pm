@@ -123,7 +123,12 @@ sub get_summoner_names_by_ids {
 
 sub get_teams_by_summoner {
     my $summonerid = shift;
-    make_api_call("/v2.2/team/by-summoner/$summonerid");
+    make_api_call("/v2.4/team/by-summoner/$summonerid");
+}
+
+sub get_team_by_id {
+    my $teamid = shift;
+    make_api_call("/v2.4/team/$teamid");
 }
 
 1;
