@@ -81,6 +81,11 @@ sub get_league_by_team {
     make_api_call("/v2.5/league/by-team/$teamid");
 }
 
+sub get_league_entry_by_team {
+    my $teamid = shift;
+    make_api_call("/v2.5/league/by-team/$teamid/entry");
+}
+
 sub get_challenger_league {
     make_api_call("/v2.5/league/challenger");
 }
