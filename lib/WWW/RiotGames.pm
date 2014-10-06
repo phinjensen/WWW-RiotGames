@@ -21,6 +21,7 @@ our @EXPORT_OK = qw(
     get_summoner_by_id
     get_summoner_names_by_ids
     get_teams_by_summoner
+    get_data_by_type
 );
 
 my $region;
@@ -38,6 +39,13 @@ sub make_api_call {
     my $lookup = shift;
     my $url_base = "http://$region.api.pvp.net/api/";
     my $request_url = $url_base . "lol/" . $region . $lookup . "?api_key=$api_key";
+    decode_json get($request_url);
+}
+
+sub make_global_api_call {
+    my $lookup = shift;
+    my $url_base = "http://global.api.pvp.net/api/lol";
+    my $request_url = $url_base . $lookup . "?api_key=$api_key";
     decode_json get($request_url);
 }
 
@@ -73,13 +81,23 @@ sub get_league_by_team {
     make_api_call("/v2.5/league/by-team/$teamid");
 }
 
-sub get_league_by_team {
-    my $teamid = shift;
-    make_api_call("/v2.5/league/by-team/$teamid");
-}
-
 sub get_challenger_league {
     make_api_call("/v2.5/league/challenger");
+}
+
+# Static data
+
+sub get_data_by_type {
+    my ($datatype, $id) = @_;
+    if ($datatype !~ /champion|item|mastery|realm|rune|summoner-spell|versions/) {
+        print "Not a valid static datatype! Please use champion, item, mastery, realm, rune, summoner-spell, or versions.";
+    } else {
+        my $lookup = "/static-data/$region/v1.2/$datatype";
+        if ($id) {
+            $lookup .= "/$id";
+        }
+        make_global_api_call($lookup, $id);
+    }
 }
 
 # Stats
