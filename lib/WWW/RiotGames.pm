@@ -25,6 +25,7 @@ our @EXPORT_OK = qw(
     get_shard_list
     get_shard_status
     get_match_by_id
+    get_match_history_by_id
 );
 
 my $region;
@@ -121,6 +122,12 @@ sub get_shard_status {
 sub get_match_by_id {
     my $matchid = shift;
     make_api_call("/v2.2/match/$matchid");
+}
+
+# Match History
+sub get_match_history_by_id {
+    my $summonerid = shift;
+    make_api_call("/v2.2/matchhistory/$summonerid");
 }
 
 # Stats
