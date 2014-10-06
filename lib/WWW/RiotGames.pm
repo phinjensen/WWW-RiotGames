@@ -91,7 +91,6 @@ sub get_challenger_league {
 }
 
 # Static data
-
 sub get_data_by_type {
     my ($datatype, $id) = @_;
     if ($datatype !~ /champion|item|mastery|realm|rune|summoner-spell|versions/) {
@@ -103,6 +102,16 @@ sub get_data_by_type {
         }
         make_global_api_call($lookup, $id);
     }
+}
+
+# Status
+sub get_shard_list {
+    decode_json get("http://status.leagueoflegends.com/shards");
+};
+
+sub get_shard_status {
+    my $region = shift;
+    decode_json get("http://status.leagueoflegends.com/shards/$region");
 }
 
 # Stats
