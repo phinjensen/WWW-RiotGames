@@ -22,6 +22,9 @@ our @EXPORT_OK = qw(
     get_summoner_names_by_ids
     get_teams_by_summoner
     get_data_by_type
+    get_shard_list
+    get_shard_status
+    get_match_by_id
 );
 
 my $region;
@@ -112,6 +115,12 @@ sub get_shard_list {
 sub get_shard_status {
     my $region = shift;
     decode_json get("http://status.leagueoflegends.com/shards/$region");
+}
+
+# Match Data
+sub get_match_by_id {
+    my $matchid = shift;
+    make_api_call("/v2.2/match/$matchid");
 }
 
 # Stats
