@@ -28,6 +28,8 @@ our @EXPORT_OK = qw(
     get_match_history_by_id
 );
 
+use version; our $VERSION = qv('0.0.1');
+
 my $region;
 my $api_key;
 
