@@ -39,10 +39,22 @@ sub set_api_key {
     $api_key = shift;
 }
 
+sub build_url_parameters {
+    my $options_ref = shift;
+    my $query_string = '?';
+    for my $option_name (keys %$options_ref) {
+        $query_string .= "$option_name=" . $options_ref->{$option_name} . "&";
+    }
+    $query_string .= "api_key=$api_key";
+    return $query_string;
+}
+
 sub make_api_call {
-    my $lookup = shift;
+    my ($lookup, $options_ref) = @_;
     my $url_base = "http://$region.api.pvp.net/api/";
-    my $request_url = $url_base . "lol/" . $region . $lookup . "?api_key=$api_key";
+    my $query_string = build_url_parameters($options_ref);
+    my $request_url = $url_base . "lol/" . $region . $lookup . $query_string;
+    print $request_url;
     decode_json get($request_url);
 }
 
@@ -55,7 +67,8 @@ sub make_global_api_call {
 
 # Champions
 sub get_champions {
-    make_api_call("/v1.2/champion");
+    my $options_ref = shift;
+    make_api_call( "/v1.2/champion", $options_ref );
 }
 
 sub get_champion_by_id {
@@ -91,12 +104,13 @@ sub get_league_entry_by_team {
 }
 
 sub get_challenger_league {
-    make_api_call("/v2.5/league/challenger");
+    my $options_ref = shift;
+    make_api_call("/v2.5/league/challenger", $options_ref);
 }
 
 # Static data
 sub get_data_by_type {
-    my ($datatype, $id) = @_;
+    my ($datatype, $id, $options_ref) = @_;
     if ($datatype !~ /champion|item|mastery|realm|rune|summoner-spell|versions/) {
         print "Not a valid static datatype! Please use champion, item, mastery, realm, rune, summoner-spell, or versions.";
     } else {
@@ -104,7 +118,7 @@ sub get_data_by_type {
         if ($id) {
             $lookup .= "/$id";
         }
-        make_global_api_call($lookup, $id);
+        make_global_api_call($lookup, $id, $options_ref);
     }
 }
 
@@ -120,24 +134,24 @@ sub get_shard_status {
 
 # Match Data
 sub get_match_by_id {
-    my $matchid = shift;
+    my ($matchid, $options_ref) = @_;
     make_api_call("/v2.2/match/$matchid");
 }
 
 # Match History
 sub get_match_history_by_id {
-    my $summonerid = shift;
+    my ($summonerid, $options_ref) = @_;
     make_api_call("/v2.2/matchhistory/$summonerid");
 }
 
 # Stats
 sub get_stats_summary_by_id {
-    my $summonerid = shift;
+    my ($summonerid, $options_ref) = @_;
     make_api_call("/v1.3/stats/by-summoner/$summonerid/summary");
 }
 
 sub get_stats_ranked_by_id {
-    my $summonerid = shift;
+    my ($summonerid, $options_ref) = @_;
     make_api_call("/v1.3/stats/by-summoner/$summonerid/ranked");
 }
 
@@ -148,8 +162,7 @@ sub get_summoner_masteries_by_id {
 }
 
 sub get_summoner_runes_by_id {
-    my $summonerid = shift;
-    make_api_call("/v1.4/summoner/$summonerid/runes");
+    my $summonerid = shift; make_api_call("/v1.4/summoner/$summonerid/runes");
 }
 
 sub get_summoner_by_name {
