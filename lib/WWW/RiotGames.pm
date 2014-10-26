@@ -54,7 +54,6 @@ sub make_api_call {
     my $url_base = "http://$region.api.pvp.net/api/";
     my $query_string = build_url_parameters($options_ref);
     my $request_url = $url_base . "lol/" . $region . $lookup . $query_string;
-    print $request_url;
     decode_json get($request_url);
 }
 
