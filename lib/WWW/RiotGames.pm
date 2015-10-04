@@ -71,12 +71,19 @@ sub _build_json {
 # Champions
 #
 
+my $champ_v = 'v1.2';
+
 sub get_champions {
-    my ($self, $free_to_play, $api_version) = @_;
+    my ($self, $free_to_play, $options) = @_;
     my %options = (
         freeToPlay => $free_to_play ? 'true' : 'false',
     );
-    return $self->_build_json('api/lol/', 'v1.2', 'champion', \%options)->{champions};
+    return $self->_build_json('api/lol/', $options->{ api_version } || $champ_v, "champion", \%options)->{champions};
+}
+
+sub get_champion {
+    my ($self, $id, $options) = @_;
+    return $self->_build_json('api/lol/', $options->{ api_version } || $champ_v, "champion/$id");
 }
 
 1;
