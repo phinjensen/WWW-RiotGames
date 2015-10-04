@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Moo;
 use HTTP::Tiny;
-use Data::Dumper;
+use JSON qw/ decode_json /;
 
 has api_key => (
     is => 'ro',
@@ -19,6 +19,8 @@ has region => (
         lc $_[0]
     },
 );
+
+my $http = HTTP::Tiny->new;
 
 #
 # Helper functions
@@ -41,7 +43,8 @@ sub _build_url_base {
 sub _build_url {
     my ($self, $path, $api_version, $lookup, $options) = @_;
     my $base = $self->_build_url_base();
-    return $base . $path . $self->region . "/$api_version/$lookup" . $self->_build_query_string($options);
+    my $url = $base . $path . $self->region . "/$api_version/$lookup" . $self->_build_query_string($options);
+    return $url;
 }
 
 sub _build_query_string {
@@ -53,6 +56,17 @@ sub _build_query_string {
     return $opt_string;
 }
 
+sub _build_json {
+    my ($self, $path, $api_version, $lookup, $options) = @_;
+    my $url = $self->_build_url($path, $api_version, $lookup, $options);
+    my $request = $http->get($url);
+    if ($request->{success}) {
+        return decode_json( $request->{content} );
+    } else {
+        die "Error fetching data: $request->{status} $request->{reason}";
+    }
+}
+
 #
 # Champions
 #
@@ -62,7 +76,7 @@ sub get_champions {
     my %options = (
         freeToPlay => $free_to_play ? 'true' : 'false',
     );
-    return $self->_build_url('api/lol/', 'v1.2', 'champion', \%options);
+    return $self->_build_json('api/lol/', 'v1.2', 'champion', \%options)->{champions};
 }
 
 1;
