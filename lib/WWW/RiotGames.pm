@@ -47,6 +47,13 @@ sub _build_url {
     return $url;
 }
 
+sub _build_special_url {
+    my ($self, $path, $options) = @_;
+    my $base = $self->_build_url_base();
+    my $url = $base . $path . $self->_build_query_string($options);
+    return $url;
+}
+
 sub _build_query_string {
     my ($self, $options) = @_;
     my $opt_string = "?api_key=" . $self->api_key;
@@ -57,8 +64,7 @@ sub _build_query_string {
 }
 
 sub _build_json {
-    my ($self, $path, $api_version, $lookup, $options) = @_;
-    my $url = $self->_build_url($path, $api_version, $lookup, $options);
+    my ($self, $url) = @_;
     my $request = $http->get($url);
     if ($request->{success}) {
         return decode_json( $request->{content} );
@@ -78,12 +84,38 @@ sub get_champions {
     my %options = (
         freeToPlay => $free_to_play ? 'true' : 'false',
     );
-    return $self->_build_json('api/lol/', $options->{ api_version } || $champ_v, "champion", \%options)->{champions};
+    my $url = $self->_build_url('api/lol/', $options->{ api_version } || $champ_v, "champion", \%options);
+    return $self->_build_json($url)->{champions};
 }
 
 sub get_champion {
     my ($self, $id, $options) = @_;
-    return $self->_build_json('api/lol/', $options->{ api_version } || $champ_v, "champion/$id");
+    my $url = $self->_build_url('api/lol/', $options->{ api_version } || $champ_v, "champion/$id");
+    return $self->_build_json($url);
+}
+
+#
+# Current Game
+#
+
+my %platform_ids = (
+    na   => 'NA1',
+    br   => 'BR1',
+    lan  => 'LA1',
+    las  => 'LA2',
+    oce  => 'OC1',
+    eune => 'EUN1',
+    tr   => 'TR1',
+    ru   => 'RU',
+    euw  => 'EUW1',
+    kr   => 'KR',
+);
+
+sub get_current_game {
+    my ($self, $summoner_id) = @_;
+    my $platform_id = $platform_ids{$self->region};
+    my $url = $self->_build_special_url("observer-mode/rest/consumer/getSpectatorGameInfo/$platform_id/$summoner_id");
+    return $self->_build_json($url)
 }
 
 1;
