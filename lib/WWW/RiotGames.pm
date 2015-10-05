@@ -128,4 +128,16 @@ sub get_featured_games {
     return $self->_build_json($url);
 }
 
+#
+# Games
+#
+
+my $game_v = 'v1.3';
+
+sub get_recent_games {
+    my ($self, $summoner_id, $options) = @_;
+    my $url = $self->_build_url("api/lol/", $options->{ api_version } || $game_v, "game/by-summoner/$summoner_id/recent");
+    return $self->_build_json($url);
+}
+
 1;
