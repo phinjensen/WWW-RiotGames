@@ -115,7 +115,17 @@ sub get_current_game {
     my ($self, $summoner_id) = @_;
     my $platform_id = $platform_ids{$self->region};
     my $url = $self->_build_special_url("observer-mode/rest/consumer/getSpectatorGameInfo/$platform_id/$summoner_id");
-    return $self->_build_json($url)
+    return $self->_build_json($url);
+}
+
+#
+# Featured Games
+#
+
+sub get_featured_games {
+    my $self = shift;
+    my $url = $self->_build_special_url("observer-mode/rest/featured");
+    return $self->_build_json($url);
 }
 
 1;
