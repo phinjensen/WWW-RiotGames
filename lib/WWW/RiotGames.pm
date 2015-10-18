@@ -144,7 +144,6 @@ my $game_v = 'v1.3';
 
 sub get_recent_games {
     my ($self, $summoner_id, $options) = @_;
-    $self->_validate_summoner_list($summoner_id, 10);
     my $url = $self->_build_url("api/lol/", $options->{ api_version } || $game_v, "game/by-summoner/$summoner_id/recent");
     return $self->_build_json($url);
 }
@@ -157,9 +156,19 @@ my $league_v = 'v2.5';
 
 sub get_league_by_summoner {
     my ($self, $summoner_ids, $options) = @_;
+    $self->_validate_summoner_list($summoner_ids, 10);
     my $url = $self->_build_url("api/lol/",
                                 $options->{ api_version } || $league_v,
                                 "league/by-summoner/$summoner_ids");
+    return $self->_build_json($url);
+}
+
+sub get_league_entries_by_summoner {
+    my ($self, $summoner_ids, $options) = @_;
+    $self->_validate_summoner_list($summoner_ids, 10);
+    my $url = $self->_build_url("api/lol/",
+                                $options->{ api_version } || $league_v,
+                                "league/by-summoner/$summoner_ids/entry");
     return $self->_build_json($url);
 }
 
