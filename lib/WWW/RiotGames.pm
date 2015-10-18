@@ -73,6 +73,14 @@ sub _build_json {
     }
 }
 
+sub _validate_summoner_list {
+    my ($self, $list, $max) = @_;
+    if ($list =~ /^(\d+,)*\d+$/) {
+        my @summoners = split(/,/,$list);
+        scalar @summoners <= $max or die "List is too long for request! Maximum length is $max";
+    }
+}
+
 #
 # Champions
 #
@@ -136,7 +144,22 @@ my $game_v = 'v1.3';
 
 sub get_recent_games {
     my ($self, $summoner_id, $options) = @_;
+    $self->_validate_summoner_list($summoner_id, 10);
     my $url = $self->_build_url("api/lol/", $options->{ api_version } || $game_v, "game/by-summoner/$summoner_id/recent");
+    return $self->_build_json($url);
+}
+
+#
+# Leagues
+#
+
+my $league_v = 'v2.5';
+
+sub get_league_by_summoner {
+    my ($self, $summoner_ids, $options) = @_;
+    my $url = $self->_build_url("api/lol/",
+                                $options->{ api_version } || $league_v,
+                                "league/by-summoner/$summoner_ids");
     return $self->_build_json($url);
 }
 
