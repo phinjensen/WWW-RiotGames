@@ -31,6 +31,11 @@ sub _is_valid_region {
     return grep(/^$region$/, qw/br eune euw kr lan las na oce ru tr/);
 }
 
+sub _is_valid_ranked_type {
+    my ($self, $type) = @_;
+    return grep(/^$type$/, qw/RANKED_SOLO_5x5 RANKED_TEAM_3x3 RANKED_TEAM_5x5/);
+}
+
 sub _build_url_base {
     my ($self, $global) = @_;
     if ($global) {
@@ -190,6 +195,35 @@ sub get_league_by_team {
     my $url = $self->_build_url("api/lol/",
                                 $options->{ api_version } || $league_v,
                                 "league/by-team/$team_ids");
+    return $self->_build_json($url);
+}
+
+sub get_league_entries_by_team {
+    my ($self, $team_ids, $options) = @_;
+    $self->_validate_team_list($team_ids, 10);
+    my $url = $self->_build_url("api/lol/",
+                                $options->{ api_version } || $league_v,
+                                "league/by-team/$team_ids/entry");
+    return $self->_build_json($url);
+}
+
+sub get_challenger_league {
+    my ($self, $type, $options) = @_;
+    $self->_is_valid_ranked_type($type) or die "Ranked type must be one of: RANKED_SOLO_5x5 RANKED_TEAM_5x5 RANKED_TEAM_3x3";
+    my $url = $self->_build_url("api/lol/",
+                                $options->{ api_version } || $league_v,
+                                "league/challenger",
+                                { type => $type });
+    return $self->_build_json($url);
+}
+
+sub get_master_league {
+    my ($self, $type, $options) = @_;
+    $self->_is_valid_ranked_type($type) or die "Ranked type must be one of: RANKED_SOLO_5x5 RANKED_TEAM_5x5 RANKED_TEAM_3x3";
+    my $url = $self->_build_url("api/lol/",
+                                $options->{ api_version } || $league_v,
+                                "league/master",
+                                { type => $type });
     return $self->_build_json($url);
 }
 
