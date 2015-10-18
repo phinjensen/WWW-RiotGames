@@ -78,6 +78,18 @@ sub _validate_summoner_list {
     if ($list =~ /^(\d+,)*\d+$/) {
         my @summoners = split(/,/,$list);
         scalar @summoners <= $max or die "List is too long for request! Maximum length is $max";
+    } else {
+        die "Summoner IDs should be a comma-seperated list of numbers.";
+    }
+}
+
+sub _validate_team_list {
+    my ($self, $list, $max) = @_;
+    if ($list =~ /^(TEAM-[a-f0-9\-]+,)*TEAM-[a-f0-9\-]+$/) {
+        my @teams = split(/,/,$list);
+        scalar @teams <= $max or die "List is too long for request! Maximum length is $max";
+    } else {
+        die "Please provide a comma-seperated list of team IDs.";
     }
 }
 
@@ -169,6 +181,15 @@ sub get_league_entries_by_summoner {
     my $url = $self->_build_url("api/lol/",
                                 $options->{ api_version } || $league_v,
                                 "league/by-summoner/$summoner_ids/entry");
+    return $self->_build_json($url);
+}
+
+sub get_league_by_team {
+    my ($self, $team_ids, $options) = @_;
+    $self->_validate_team_list($team_ids, 10);
+    my $url = $self->_build_url("api/lol/",
+                                $options->{ api_version } || $league_v,
+                                "league/by-team/$team_ids");
     return $self->_build_json($url);
 }
 
