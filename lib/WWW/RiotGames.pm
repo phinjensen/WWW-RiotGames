@@ -52,6 +52,13 @@ sub _build_url {
     return $url;
 }
 
+sub _build_global_url {
+    my ($self, $path, $api_version, $lookup, $options) = @_;
+    my $base = $self->_build_url_base(1);
+    my $url = $base . $path . $self->region . "/$api_version/$lookup" . $self->_build_query_string($options);
+    return $url;
+}
+
 sub _build_special_url {
     my ($self, $path, $options) = @_;
     my $base = $self->_build_url_base();
@@ -224,6 +231,102 @@ sub get_master_league {
                                 $options->{ api_version } || $league_v,
                                 "league/master",
                                 { type => $type });
+    return $self->_build_json($url);
+}
+
+#
+# Static Data
+#
+
+my $static_v = 'v1.2';
+
+sub get_static_champions {
+    my ($self, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "champion", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_champion_by_id {
+    my ($self, $id, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "champion/$id", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_items {
+    my ($self, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "item", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_item_by_id {
+    my ($self, $id, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "item/$id", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_language_strings {
+    my ($self, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "language-strings", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_languages {
+    my ($self, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "languages", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_map {
+    my ($self, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "map", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_masteries {
+    my ($self, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "mastery", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_mastery_by_id {
+    my ($self, $id, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "mastery/$id", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_realm {
+    my ($self, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "realm", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_runes {
+    my ($self, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "rune", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_rune_by_id {
+    my ($self, $id, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "rune/$id", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_summoner_spells {
+    my ($self, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "summoner-spell", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_summoner_spell_by_id {
+    my ($self, $id, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "summoner-spell/$id", $options);
+    return $self->_build_json($url);
+}
+
+sub get_static_versions {
+    my ($self, $options) = @_;
+    my $url = $self->_build_global_url("api/lol/static-data/", $options->{ api_version } || $static_v, "versions", $options);
     return $self->_build_json($url);
 }
 
